@@ -12,7 +12,7 @@ find_package(antlr4-runtime REQUIRED)
 set(ANTLR4_JAR_LOCATION ${PROJECT_SOURCE_DIR}/thirdparty/antlr/antlr-4.9-complete.jar)
 
 antlr4_generate(
-json_parser
+JSON_PARSER
 ${CMAKE_CURRENT_SOURCE_DIR}/grammar/JSON.g4
 BOTH
 FALSE
@@ -21,10 +21,12 @@ TRUE
 )
 
 
-add_executable(${PROJECT_NAME} main.cpp ${ANTLR4_SRC_FILES_json_parser})
+add_executable(${PROJECT_NAME} main.cpp ${ANTLR4_SRC_FILES_JSON_PARSER})
 # add directories for generated include files
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR} ${ANTLR4_INCLUDE_DIR} ${ANTLR4_INCLUDE_DIR_json_parser} )
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR} ${ANTLR4_INCLUDE_DIR} ${ANTLR4_INCLUDE_DIR_JSON_PARSER} )
 
 add_dependencies( ${PROJECT_NAME} antlr4_static )
 
-target_link_libraries( ${PROJECT_NAME} PRIVATE antlr4_static)
+target_link_libraries( ${PROJECT_NAME} antlr4_static)
+
+add_subdirectory(benchmarks)
