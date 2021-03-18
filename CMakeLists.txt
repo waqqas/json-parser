@@ -20,14 +20,10 @@ TRUE
 "json"
 )
 
-message("ANTLR4_INCLUDE_DIR_json_parser = ${ANTLR4_INCLUDE_DIR_json_parser}")
-message("ANTLR4_SRC_FILES_json_parser = ${ANTLR4_SRC_FILES_json_parser}")
-
-# add directories for generated include files
- include_directories( ${PROJECT_BINARY_DIR} ${ANTLR4_INCLUDE_DIR} ${ANTLR4_INCLUDE_DIR_json_parser} )
 
 add_executable(${PROJECT_NAME} main.cpp ${ANTLR4_SRC_FILES_json_parser})
-include_directories( ${ANTLR4_INCLUDE_DIR} )
+# add directories for generated include files
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR} ${ANTLR4_INCLUDE_DIR} ${ANTLR4_INCLUDE_DIR_json_parser} )
 
 add_dependencies( ${PROJECT_NAME} antlr4_static )
 
