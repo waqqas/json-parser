@@ -1,9 +1,31 @@
-#include <iostream>
-#include <antlr4-runtime.h>
-#include "JSONParser.h"
+#include "jsonner.h"
 
-int main()
+#include <iostream>
+
+using namespace std;
+
+int main(int argc, char *argv[])
 {
-    std::cout << "Hello World" << std::endl;
-    return 0;
+   if (argc == 1)
+   {
+      cout << "Usage: main json-file" << endl;
+      return -1;
+   }
+
+   ifstream jsonFile(argv[1]);
+   if (jsonFile.is_open())
+   {
+      jsonner::parser parser(jsonFile);
+      try
+      {
+         parser.parse();
+      }
+      catch (exception &e)
+      {
+         cerr << e.what() << endl;
+      }
+
+      jsonFile.close();
+   }
+   return 0;
 }

@@ -29,6 +29,6 @@ message("ANTLR4_SRC_FILES_json_parser = ${ANTLR4_SRC_FILES_json_parser}")
 add_executable(${PROJECT_NAME} main.cpp ${ANTLR4_SRC_FILES_json_parser})
 include_directories( ${ANTLR4_INCLUDE_DIR} )
 
-add_dependencies( ${PROJECT_NAME} antlr4_shared )
+add_dependencies( ${PROJECT_NAME} antlr4_static )
 
-target_link_libraries( ${PROJECT_NAME} PRIVATE antlr4_shared)
+target_link_libraries( ${PROJECT_NAME} PRIVATE antlr4_static)
