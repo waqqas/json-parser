@@ -18,7 +18,8 @@ int main(int argc, char *argv[])
       jsonner::parser parser(jsonFile);
       try
       {
-         parser.parse();
+         auto doc = parser.parse();
+         cout << doc;
       }
       catch (exception &e)
       {

@@ -6,11 +6,31 @@
 #include "antlr4-runtime.h"
 
 #include <iostream>
+#include <string_view>
 
 namespace jsonner {
 using namespace std;
 using namespace antlr4;
 using namespace json;
+
+class doc
+{
+
+ public:
+   doc(tree::ParseTree *tree)
+      : _tree(tree)
+   {}
+
+   friend ostream &operator<<(ostream &output, const doc &d)
+   {
+      output << d._tree->toStringTree();
+      return output;
+   }
+
+ private:
+   tree::ParseTree *_tree;
+};
+
 class parser
 {
 
@@ -22,16 +42,9 @@ class parser
       , _parser(&_tokens)
    {}
 
-   void parse()
+   doc parse()
    {
-      JSONParser::JsonContext *_tree;
-
-      _tree = _parser.json();
-
-      cout << _tree->toStringTree(&_parser) << endl;
-
-      // visitor visitor;
-      // return visitor.visitJson(_tree);
+      return doc(_parser.json());
    }
 
  private:
