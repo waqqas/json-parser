@@ -5,13 +5,13 @@
 
 static void BM_SomeFunction(benchmark::State &state)
 {
-   std::ifstream jsonFile("test.json");
+   // std::ifstream jsonFile("test.json");
 
-   jsonner::parser parser(jsonFile);
+   // jsonner::parser parser(jsonFile);
    // Perform setup here
    for (auto _ : state)
    {
-      parser.parse();
+      // parser.parse();
    }
 }
 // Register the function as a benchmark

@@ -13,38 +13,23 @@ using namespace std;
 using namespace antlr4;
 using namespace json;
 
-class doc
-{
-
- public:
-   doc(tree::ParseTree *tree)
-      : _tree(tree)
-   {}
-
-   friend ostream &operator<<(ostream &output, const doc &d)
-   {
-      output << d._tree->toStringTree();
-      return output;
-   }
-
- private:
-   tree::ParseTree *_tree;
-};
+class doc;
 
 class parser
 {
+   friend doc;
 
  public:
-   parser(ifstream &input)
+   parser(istream &input)
       : _input(input)
       , _lexer(&_input)
       , _tokens(&_lexer)
       , _parser(&_tokens)
    {}
 
-   doc parse()
+   tree::ParseTree *parse()
    {
-      return doc(_parser.json());
+      return _parser.json();
    }
 
  private:
@@ -53,4 +38,32 @@ class parser
    CommonTokenStream _tokens;
    JSONParser        _parser;
 };
+
+class doc
+{
+
+ public:
+   friend ostream &operator<<(ostream &output, const doc &d)
+   {
+      if (d._parser)
+      {
+         output << d._tree->toStringTree(&d._parser->_parser);
+      }
+      return output;
+   }
+   friend istream &operator>>(istream &in, doc &d)
+   {
+      if (!d._parser)
+      {
+         d._parser = make_shared<parser>(in);
+      }
+      d._tree = d._parser->parse();
+      return in;
+   }
+
+ private:
+   tree::ParseTree *  _tree;
+   shared_ptr<parser> _parser;
+};
+
 }  // namespace jsonner
