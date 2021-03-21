@@ -1,24 +1,21 @@
 #pragma once
 
-#include "JSONBaseVisitor.h"
 #include "JSONLexer.h"
 #include "JSONParser.h"
-#include "antlr4-runtime.h"
+#include "visitors.h"
 
+#include <antlr4-runtime.h>
 #include <iostream>
 #include <string_view>
 
 namespace jsonner {
 using namespace std;
 using namespace antlr4;
-using namespace json;
 
 class doc;
 
 class parser
 {
-   friend doc;
-
  public:
    parser(istream &input)
       : _input(input)
@@ -27,9 +24,24 @@ class parser
       , _parser(&_tokens)
    {}
 
-   tree::ParseTree *parse()
+   ParserRuleContext *parse()
    {
       return _parser.json();
+   }
+
+   JSONParser *get_parser_ptr()
+   {
+      return &_parser;
+   }
+
+   void reset(istream &in)
+   {
+      _input.reset();
+      _lexer.reset();
+      _tokens.reset();
+      _parser.reset();
+
+      _input.load(in);
    }
 
  private:
@@ -43,11 +55,17 @@ class doc
 {
 
  public:
+   doc() = default;
+   doc(ParserRuleContext *tree, shared_ptr<parser> parser)
+      : _tree(tree)
+      , _parser(parser)
+   {}
+
    friend ostream &operator<<(ostream &output, const doc &d)
    {
-      if (d._parser)
+      if (d._parser && d._tree)
       {
-         output << d._tree->toStringTree(&d._parser->_parser);
+         output << d._tree->toStringTree(d._parser->get_parser_ptr(), true);
       }
       return output;
    }
@@ -57,12 +75,30 @@ class doc
       {
          d._parser = make_shared<parser>(in);
       }
+      else
+      {
+         d._parser->reset(in);
+      }
       d._tree = d._parser->parse();
       return in;
    }
 
+   doc operator[](const string &key)
+   {
+      visitors::JSONPairVisitor visitor{key};
+      auto                      node = _tree->accept(&visitor);
+      if (node.isNotNull())
+      {
+         return doc(node.as<ParserRuleContext *>(), _parser);
+      }
+      else
+      {
+         throw exception();
+      }
+   }
+
  private:
-   tree::ParseTree *  _tree;
+   ParserRuleContext *_tree;
    shared_ptr<parser> _parser;
 };
 

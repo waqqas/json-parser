@@ -17,7 +17,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/grammar/JSON.g4
 BOTH
 FALSE
 TRUE
-"json"
+"jsonner"
 )
 
 
@@ -29,4 +29,4 @@ add_dependencies( ${PROJECT_NAME} antlr4_static )
 
 target_link_libraries( ${PROJECT_NAME} antlr4_static)
 
-add_subdirectory(benchmarks)
+# add_subdirectory(benchmarks)
