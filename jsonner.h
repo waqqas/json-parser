@@ -98,6 +98,14 @@ class doc
       }
    }
 
+   template <typename T>
+   T as()
+   {
+      JSONParser::PairContext *pair  = dynamic_cast<JSONParser::PairContext *>(_tree);
+      auto                     value = pair->value()->STRING();
+      return value->toString();
+   }
+
  private:
    ParserRuleContext *_tree;
    shared_ptr<parser> _parser;
