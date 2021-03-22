@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
       // ss.seekg(ios_base::beg);
       // ss >> doc;
       cout << doc << endl;
-      cout << doc["\"greetings\""] << endl;
+      cout << doc["greetings"] << endl;
    }
    catch (exception &e)
    {
