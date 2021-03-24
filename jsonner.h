@@ -101,9 +101,23 @@ class doc
    template <typename T>
    T as()
    {
-      JSONParser::PairContext *pair  = dynamic_cast<JSONParser::PairContext *>(_tree);
-      auto                     value = pair->value()->STRING();
-      return value->toString();
+      try
+      {
+         JSONParser::PairContext *pair  = dynamic_cast<JSONParser::PairContext *>(_tree);
+         auto                     value = pair->value()->STRING();
+         if (value)
+         {
+            return value->getText();
+         }
+         else
+         {
+            throw std::bad_cast();
+         }
+      }
+      catch (std::bad_cast &ex)
+      {
+         throw ex;
+      }
    }
 
  private:
