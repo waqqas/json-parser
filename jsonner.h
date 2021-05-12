@@ -98,6 +98,28 @@ class doc
       }
    }
 
+   template <typename T>
+   T as()
+   {
+      try
+      {
+         JSONParser::PairContext *pair  = dynamic_cast<JSONParser::PairContext *>(_tree);
+         auto                     value = pair->value()->STRING();
+         if (value)
+         {
+            return value->getText();
+         }
+         else
+         {
+            throw std::bad_cast();
+         }
+      }
+      catch (std::bad_cast &ex)
+      {
+         throw ex;
+      }
+   }
+
  private:
    ParserRuleContext *_tree;
    shared_ptr<parser> _parser;

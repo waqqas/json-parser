@@ -23,7 +23,8 @@ namespace visitors {
          {
             if (pair->STRING()->getText() == _key)
             {
-               return (ParserRuleContext *)pair;
+               result = (ParserRuleContext *)pair;
+               break;
             }
          }
          return result;
